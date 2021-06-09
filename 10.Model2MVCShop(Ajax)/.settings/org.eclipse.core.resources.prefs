@@ -1,4 +1,7 @@
 eclipse.preferences.version=1
 encoding//src/main/java/com/model2/mvc/web/user/UserController.java=EUC-KR
 encoding//src/main/java/com/model2/mvc/web/user/UserRestController.java=EUC-KR
+encoding//src/main/webapp/css/admin.css=EUC-KR
+encoding//src/main/webapp/css/common.css=EUC-KR
+encoding//src/main/webapp/css/left.css=EUC-KR
 encoding//src/test/java/com/model2/mvc/service/user/test/UserServiceTest.java=EUC-KR

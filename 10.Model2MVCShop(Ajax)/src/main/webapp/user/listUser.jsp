@@ -20,7 +20,7 @@
 <script type="text/javascript">
 	
 		// 검색 / page 두가지 경우 모두 Form 전송을 위해 JavaScrpt 이용  
-		function fncGetUserList(currentPage) {
+		function fncGetList(currentPage) {
 			$("#currentPage").val(currentPage)
 			$("form").attr("method" , "POST").attr("action" , "/user/listUser").submit();
 		}
@@ -34,7 +34,7 @@
 			 $( "td.ct_btn01:contains('검색')" ).on("click" , function() {
 				//Debug..
 				//alert(  $( "td.ct_btn01:contains('검색')" ).html() );
-				fncGetUserList(1);
+				fncGetList(1);
 			});
 			
 			
@@ -131,8 +131,7 @@
 							<option value="1"
 								${ ! empty search.searchCondition && search.searchCondition==1 ? "selected" : "" }>회원명</option>
 					</select> <input type="text" name="searchKeyword"
-						value="${! empty search.searchKeyword ? search.searchKeyword : "
-						"}"  
+						value="${! empty search.searchKeyword ? search.searchKeyword : ''}"  
 						class="ct_input_g" style="width: 200px; height: 20px">
 					</td>
 					<td align="right" width="70">

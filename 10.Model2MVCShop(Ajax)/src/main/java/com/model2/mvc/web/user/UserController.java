@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,7 +23,7 @@ import com.model2.mvc.service.domain.User;
 import com.model2.mvc.service.user.UserService;
 
 
-//==> »∏ø¯∞¸∏Æ Controller
+//==> ÌöåÏõêÍ¥ÄÎ¶¨ Controller
 @Controller
 @RequestMapping("/user/*")
 public class UserController {
@@ -30,7 +32,7 @@ public class UserController {
 	@Autowired
 	@Qualifier("userServiceImpl")
 	private UserService userService;
-	//setter Method ±∏«ˆ æ ¿Ω
+	//setter Method Íµ¨ÌòÑ ÏïäÏùå
 		
 	public UserController(){
 		System.out.println(this.getClass());
@@ -67,11 +69,24 @@ public class UserController {
 		System.out.println("/user/getUser : GET");
 		//Business Logic
 		User user = userService.getUser(userId);
-		// Model ∞˙ View ø¨∞·
+		// Model Í≥º View Ïó∞Í≤∞
 		model.addAttribute("user", user);
 		
 		return "forward:/user/getUser.jsp";
 	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	@RequestMapping( value="getJsonUser/{userId}", method=RequestMethod.GET )
+	public void getJsonUser(	@PathVariable String userId, 
+									 			Model model) throws Exception{
+		
+		System.out.println("/getJsonUser/getUser : GET");
+		//Business Logic
+		User user = userService.getUser(userId);
+		// Model Í≥º View Ïó∞Í≤∞
+		model.addAttribute("user", user);
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 
 	@RequestMapping( value="updateUser", method=RequestMethod.GET )
@@ -80,7 +95,7 @@ public class UserController {
 		System.out.println("/user/updateUser : GET");
 		//Business Logic
 		User user = userService.getUser(userId);
-		// Model ∞˙ View ø¨∞·
+		// Model Í≥º View Ïó∞Í≤∞
 		model.addAttribute("user", user);
 		
 		return "forward:/user/updateUser.jsp";
@@ -123,7 +138,26 @@ public class UserController {
 		
 		return "redirect:/index.jsp";
 	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	@RequestMapping( value="jsonLogin", method=RequestMethod.POST )
+	public void jsonLogin(	@RequestBody User user,
+												HttpSession session,
+												Model model) throws Exception{
+	
+		System.out.println("/user/jsonLogin : POST");
+		//Business Logic
+		System.out.println("::"+user);
+		User dbUser=userService.getUser(user.getUserId());
 		
+		if( user.getPassword().equals(dbUser.getPassword())){
+			session.setAttribute("user", dbUser);
+		}
+		
+		model.addAttribute("user", dbUser);
+	}
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	
 	@RequestMapping( value="logout", method=RequestMethod.GET )
 	public String logout(HttpSession session ) throws Exception{
@@ -142,7 +176,7 @@ public class UserController {
 		System.out.println("/user/checkDuplication : POST");
 		//Business Logic
 		boolean result=userService.checkDuplication(userId);
-		// Model ∞˙ View ø¨∞·
+		// Model Í≥º View Ïó∞Í≤∞
 		model.addAttribute("result", new Boolean(result));
 		model.addAttribute("userId", userId);
 
@@ -160,13 +194,13 @@ public class UserController {
 		}
 		search.setPageSize(pageSize);
 		
-		// Business logic ºˆ«‡
+		// Business logic ÏàòÌñâ
 		Map<String , Object> map=userService.getUserList(search);
 		
 		Page resultPage = new Page( search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
 		System.out.println(resultPage);
 		
-		// Model ∞˙ View ø¨∞·
+		// Model Í≥º View Ïó∞Í≤∞
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("resultPage", resultPage);
 		model.addAttribute("search", search);
